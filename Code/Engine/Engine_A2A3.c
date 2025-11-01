@@ -5,6 +5,8 @@ void Engine_A2A3_setPWM(float voltage);
 
 void Engine_A2A3_init(void){
 	
+		Tahometer_B0B1_init();
+	
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
     RCC->APB2ENR |= RCC_APB2ENR_TIM9EN;
     
@@ -36,7 +38,7 @@ void Engine_A2A3_init(void){
     TIM9->CR1 |= TIM_CR1_CEN;
     
     TIM9->CCR1 = 0;
-    TIM9->CCR2 = 50;
+    TIM9->CCR2 = 100;
 }
 
 
