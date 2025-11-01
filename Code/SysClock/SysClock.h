@@ -1,8 +1,7 @@
-#ifndef SysClock_H
-#define SysClock_H
+#ifndef SysClock_H_
+#define SysClock_H_
 
-#include <stm32f401xc.h>
-#include <stdint.h>
+#include "main.h"
 
 void SysClock_init(void);
 void SysTick_Handler(void);

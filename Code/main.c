@@ -12,8 +12,6 @@ int main(void)
 }
 
 void init(void){
-	//SysClock_init();
-	//BUTTON_PA0_Init();
-	LED_PC13_init();
-	Encoder_A6A7_init();
+	SysClock_init();
+	Engine_A2A3_init();
 }
