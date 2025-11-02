@@ -7,7 +7,10 @@ int main(void)
 	init();
 	
 	for(;;) {
-		__NOP();
+		if (Flag_ControlSysetmA2A3){
+			Flag_ControlSysetmA2A3 = 0;
+			ControlSystemA2A3();
+		}
 	}
 }
 

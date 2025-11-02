@@ -12,7 +12,7 @@ void Tahometer_B0B1_zeroriseDetected(void);
 void TIM2_IRQHandler(void);
 
 
-extern int32_t speed;
+extern int32_t speedA2A3;
 
 
 #endif

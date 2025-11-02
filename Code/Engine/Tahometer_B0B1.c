@@ -11,14 +11,14 @@ static int8_t direction[10] = {0};
 static uint8_t pointer = 0;
 static uint32_t prevValue = 0;
 static uint8_t pause = 0;
-int32_t speed = 0;
+int32_t speedA2A3 = 0;
 
 
 void Tahometer_B0B1_init(void){
 	
 	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
 	TIM2->PSC = 1600 - 1;
-	TIM2->ARR = 500;
+	TIM2->ARR = 50;
 	TIM2->DIER |= TIM_DIER_UIE;
 	TIM2->EGR |= TIM_EGR_UG;
   NVIC_EnableIRQ(TIM2_IRQn);
@@ -39,7 +39,7 @@ void Tahometer_B0B1_init(void){
 	
 	
 	TIM3->PSC = 16-1;
-	TIM3->ARR = 12000;
+	TIM3->ARR = 120000;
 	
 	TIM3->CCMR2 &= ~TIM_CCMR2_CC3S;
 	TIM3->CCMR2 |= TIM_CCMR2_CC3S_0;
@@ -103,10 +103,10 @@ void TIM2_IRQHandler(void){
 	if(TIM2->SR & TIM_SR_UIF){
 		TIM2->SR &= ~TIM_SR_UIF;
 		if (direction[0] == 0 || direction[1] == 0 ||direction[2] == 0 ||direction[3] == 0 ||direction[4] == 0 ||direction[5] == 0 ||direction[6] == 0 ||direction[7] == 0 ||direction[8] == 0 ||direction[9] == 0){
-			speed = 0;
+			speedA2A3 = 0;
 		}
 		else{
-			speed = (int32_t)(SpeedScaler / (time[0] + time[1] + time[2] + time[3] + time[4] + time[5] + time[6] + time[7] + time[8] + time[9])) * (direction[0] + direction[1] + direction[2] + direction[3] + direction[4] + direction[5] + direction[6] + direction[7] + direction[8] + direction[9] > 0 ? 1 : -1);
+			speedA2A3 = (int32_t)(SpeedScaler / (time[0] + time[1] + time[2] + time[3] + time[4] + time[5] + time[6] + time[7] + time[8] + time[9])) * (direction[0] + direction[1] + direction[2] + direction[3] + direction[4] + direction[5] + direction[6] + direction[7] + direction[8] + direction[9] > 0 ? 1 : -1);
 		}
 	}
 }

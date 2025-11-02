@@ -6,5 +6,6 @@
 #include "SysClock/SysClock.h"
 #include "Engine/Engine_A2A3.h"
 #include "Engine/Tahometer_B0B1.h"
+#include "Engine/ControlSystem_A2A3.h"
 
 #endif
