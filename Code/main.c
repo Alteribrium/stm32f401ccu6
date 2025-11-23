@@ -7,7 +7,9 @@ int main(void)
 	init();
 	
 	for(;;) {
-		__NOP();
+		//uint8_t buff[] = {1,2,3,4,5,6,7,8};
+		USART2_DMA_SendString("asafas");
+		SysClock_delay(1000);
 	}
 }
 
