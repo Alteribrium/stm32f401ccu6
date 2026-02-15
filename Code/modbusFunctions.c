@@ -1,5 +1,5 @@
 
-
+/*
 void putFloatToAddress(float val, uint16_t addr) {
 	uint32_t intVal;
 	memcpy(&intaVal, &val, 4);
@@ -11,4 +11,4 @@ void putFloatToAddress(float val, uint16_t addr) {
 
 void putMotorSpeedToMobus(float val) {
 	putFloatToAddress(val, MOTOR_SPEED_ADRESS);
-}
+}*/
