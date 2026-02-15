@@ -7,7 +7,7 @@ int main(void)
 	init();
 	
 	for(;;) {
-		__NOP();
+		Modbus_Work();
 	}
 }
 

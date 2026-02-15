@@ -5,5 +5,6 @@
 #include <stm32f401xc.h>
 #include "SysClock/SysClock.h"
 #include "USART/USART.h"
+#include "modbus.h"
 
 #endif

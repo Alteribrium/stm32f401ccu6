@@ -5,6 +5,11 @@ char temp = 0;
 
 void USART2_IRQHandler(void);
 
+void DMA1_Stream6_IRQHandler(void);
+
+extern uint8_t receve_complete;
+uint8_t receve_complete = 0;
+
 extern uint16_t buff_rx_len;
 uint16_t buff_rx_len = 0;
 static uint8_t dma_tx_buffer[256];
@@ -14,6 +19,16 @@ extern uint8_t dma_rx_ready;
 uint8_t dma_rx_ready = 0;
 //static uint32_t dma_rx_length = 0; 
 //static uint16_t len;
+
+
+
+static uint8_t modbus_rx_buffer[256];
+static uint8_t modbus_tx_buffer[256];
+static uint8_t rx_index = 0;
+void Modbus_Send_Callback(int8_t length);
+void Modbus_Work(void);
+
+
 
 void USART2_init(void){
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
@@ -112,18 +127,22 @@ void USART2_IRQHandler(void){
 	temp = USART2->SR;
 	(void)temp;
 	buff_rx_len = 256 - (uint16_t)DMA1_Stream5->NDTR;
-	USART2_DMA_SendString((char *)(dma_rx_buffer), buff_rx_len);
+	//USART2_DMA_SendString((char *)(dma_rx_buffer), buff_rx_len);
 	DMA1_Stream5->CR &= ~DMA_SxCR_EN;
 	DMA1->HIFCR = DMA_HIFCR_CTCIF5;
 	DMA1_Stream5->NDTR = 256;
 	DMA1_Stream5->CR |= DMA_SxCR_EN;
+	receve_complete = 1;
 }
-/*
 
-void USART2_Process_Received_Data(void){
-	 
-	//uint32_t data_length = dma_rx_length;
-	USART2_DMA_SendString("12345");
-	
+void Modbus_Work(void){
+ if(receve_complete) {
+		ModBusRTU_PR(dma_rx_buffer,	buff_rx_len,	modbus_tx_buffer,	Modbus_Send_Callback);
+		
+		receve_complete = 0;
+	}
 }
-*/
+
+void Modbus_Send_Callback(int8_t length) {
+	USART2_DMA_SendString(modbus_tx_buffer,length);
+}
