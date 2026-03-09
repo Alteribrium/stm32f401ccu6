@@ -1,0 +1,28 @@
+#include "USART.h"
+#include <stdio.h>
+#include <string.h>
+
+void USART1_IRQHandler(void);
+
+void USART1_init(void){
+	
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
+	RCC->APB2ENR |= RCC_APB2ENR_USART1EN;
+
+	// PA9 - TX
+	GPIOA->MODER |= GPIO_MODER_MODER9_1;
+	// PA10 - RX
+	GPIOA->MODER |= GPIO_MODER_MODER10_1;
+
+	GPIOA->AFR[1] |= (7 << GPIO_AFRH_AFSEL9_Pos) | (7 << GPIO_AFRH_AFSEL10_Pos);
+
+
+	USART1->BRR = 139;
+	USART1->CR1 |= USART_CR1_TE | USART_CR1_RE | USART_CR1_UE;
+
+	// USART1_DMA_init();
+	
+	USART1->CR1 |= USART_CR1_IDLEIE;
+	NVIC_EnableIRQ(USART1_IRQn);
+}
+
