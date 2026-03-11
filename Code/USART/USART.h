@@ -13,6 +13,6 @@ void DMA1_Stream5_IRQHandler(void);
 void USART2_Process_Received_Data(void);
 void USART2_DMA_SendChar(char str);
 void Modbus_Work(void);
-extern char temp;
+//extern char temp;
 
 #endif

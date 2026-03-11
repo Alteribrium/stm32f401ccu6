@@ -119,10 +119,10 @@ void USART2_DMA_SendString(char *str,uint16_t l){
 		}
 		
 		////
-			GPIOA->ODR |= (1 << 9);
+			//GPIOA->ODR |= (1 << 9);
     
 
-    SysClock_delay(1);
+    //SysClock_delay(1);
 		
 		/////
 		
@@ -159,7 +159,6 @@ void USART2_IRQHandler(void){
 	temp = USART2->SR;
 	(void)temp;
 	buff_rx_len = 256 - (uint16_t)DMA1_Stream5->NDTR;
-	//USART2_DMA_SendString((char *)(dma_rx_buffer), buff_rx_len);
 	DMA1_Stream5->CR &= ~DMA_SxCR_EN;
 	DMA1->HIFCR = DMA_HIFCR_CTCIF5;
 	DMA1_Stream5->NDTR = 256;
@@ -177,3 +176,5 @@ void Modbus_Work(void){
 void Modbus_Send_Callback(int8_t length) {
 	USART2_DMA_SendString(modbus_tx_buffer,length);
 }
+
+
