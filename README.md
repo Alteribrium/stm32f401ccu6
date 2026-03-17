@@ -1,8 +1,13 @@
 USED PINS:  
+    Engine
 A2 - LPWM  
 A3 - RPWM  
 B0 - Tahometer yellow  
 B1 - Tahometer white  
+    USART
+A8 - driver toggler
+A9 - USART1 TX
+A10 - USART1 RX
 
 USED TIMERS:  
 T2 - count Speed every 50ms  
