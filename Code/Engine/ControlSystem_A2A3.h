@@ -13,7 +13,7 @@ extern uint8_t Flag_ControlSysetmA2A3;
 extern int32_t targetSpeedA2A3;
 extern float dif;
 extern float voltagediff;
-
+extern uint8_t ControlSystemStatus;
 extern int32_t position;
 
 #endif

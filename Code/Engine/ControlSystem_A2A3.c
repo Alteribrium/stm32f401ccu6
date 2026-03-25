@@ -6,27 +6,36 @@ void ControlSystemA2A3(void);
 
 uint8_t Flag_ControlSysetmA2A3 = 0;
 int32_t targetSpeedA2A3 = 0;
+uint8_t ControlSystemStatus = 0;
 float dif = 0;
 float voltagediff = 0;
 static float voltage = 0;
 
 void ControlSystemA2A3(void){
-	dif = (float)(targetSpeedA2A3 - speedA2A3);
-	if (targetSpeedA2A3 == 0){
-		voltagediff = 0;
-		voltage = 0;
+	if (Flag_ControlSysetmA2A3 && ControlSystemStatus){
+		Flag_ControlSysetmA2A3 = 0;
+		dif = (float)(targetSpeedA2A3 - speedA2A3);
+		if (targetSpeedA2A3 == 0){
+			voltagediff = 0;
+			voltage = 0;
+		}
+		else if (dif < (float)(MAXSPEEDA2A3 *0.05) && dif > (float)(-MAXSPEEDA2A3 *0.05)){
+			__NOP();
+			voltagediff = 0;
+		}
+		else if (dif < (float)(MAXSPEEDA2A3 *0.2) && dif > (float)(-MAXSPEEDA2A3 *0.2)){
+			voltagediff = (float)(dif* MAXVOLTAGE_Engige_A2A3 / MAXSPEEDA2A3 * (float)(0.5));
+			voltage += (float)(dif * MAXVOLTAGE_Engige_A2A3 / MAXSPEEDA2A3 * (float)(0.5));
+		}
+		else{
+			voltagediff  = (float)(MAXVOLTAGE_Engige_A2A3 * 0.15 * (dif > 0 ? 1 : -1) * 0.8);
+			voltage += (float)(MAXVOLTAGE_Engige_A2A3 * 0.15 * (dif > 0 ? 1 : -1) * 0.8);
+		}
 	}
-	else if (dif < (float)(MAXSPEEDA2A3 *0.05) && dif > (float)(-MAXSPEEDA2A3 *0.05)){
-		__NOP();
-		voltagediff = 0;
-	}
-	else if (dif < (float)(MAXSPEEDA2A3 *0.2) && dif > (float)(-MAXSPEEDA2A3 *0.2)){
-		voltagediff = (float)(dif* MAXVOLTAGE_Engige_A2A3 / MAXSPEEDA2A3 * (float)(0.5));
-		voltage += (float)(dif * MAXVOLTAGE_Engige_A2A3 / MAXSPEEDA2A3 * (float)(0.5));
-	}
-	else{
-		voltagediff  = (float)(MAXVOLTAGE_Engige_A2A3 * 0.15 * (dif > 0 ? 1 : -1) * 0.8);
-		voltage += (float)(MAXVOLTAGE_Engige_A2A3 * 0.15 * (dif > 0 ? 1 : -1) * 0.8);
+	else if (!ControlSystemStatus) {
+		if (voltage > 0 || voltage < 0){
+			voltage = 0;
+		}
 	}
 	Engine_A2A3_setPWM(voltage);
 }

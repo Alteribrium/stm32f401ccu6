@@ -10,4 +10,5 @@
 //#include "USART/USART.h"
 #include "modbus.h"
 #include "USART/USART1.h"
+#include "modbusFunctions.h"
 #endif

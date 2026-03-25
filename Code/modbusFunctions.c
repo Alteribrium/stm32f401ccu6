@@ -1,4 +1,11 @@
+#include "modbusFunctions.h"
+#include <stdio.h>
+#include <string.h>
 
+void WriteModbus(void){
+	ControlSystemStatus = OutputRegisters[CONTROL_SYSTEM_STATUS_ADDRESS] & 1;
+	targetSpeedA2A3 = OutputRegisters[1];
+}
 /*
 void putFloatToAddress(float val, uint16_t addr) {
 	uint32_t intVal;

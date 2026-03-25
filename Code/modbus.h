@@ -18,6 +18,7 @@
 #define TRANSCEIVER_SIZE 256 
 //asffaf
 //safasf
+extern uint8_t OutputCoils[InCoilsSize];
 extern uint16_t OutputRegisters[OutRegSize];
 
 /* Modbus Function Codes -----------------------------------------------------*/
