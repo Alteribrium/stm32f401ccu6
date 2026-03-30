@@ -5,8 +5,9 @@ int main(void)
 { 
 	init();
 	for(;;){
-		ControlSystemA2A3();
+		//ControlSystemA2A3();
 		//targetSpeedA2A3 = OutputRegisters[0];
+		SetPWM_A2A3(12);
 		Modbus_Work();
 		WriteModbus();
 	}

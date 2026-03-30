@@ -7,6 +7,7 @@
 #include "Engine/Engine_A2A3.h"
 #include "Engine/Tahometer_B0B1.h"
 #include "Engine/ControlSystem_A2A3.h"
+#include "Engine/JustPWM_A2A3.h"
 //#include "USART/USART.h"
 #include "modbus.h"
 #include "USART/USART1.h"
