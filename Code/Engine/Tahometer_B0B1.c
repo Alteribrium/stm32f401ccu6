@@ -99,14 +99,14 @@ void Tahometer_B0B1_riseDetected(uint32_t value,int8_t dir){
 	pointer = ++pointer == 10 ? 0 : pointer;
 }
 
-void TIM2_IRQHandler(void){
-	if(TIM2->SR & TIM_SR_UIF){
-		TIM2->SR &= ~TIM_SR_UIF;
-		if (direction[0] == 0 || direction[1] == 0 ||direction[2] == 0 ||direction[3] == 0 ||direction[4] == 0 ||direction[5] == 0 ||direction[6] == 0 ||direction[7] == 0 ||direction[8] == 0 ||direction[9] == 0){
-			speedA2A3 = 0;
-		}
-		else{
-			speedA2A3 = (int32_t)(SpeedScaler / (time[0] + time[1] + time[2] + time[3] + time[4] + time[5] + time[6] + time[7] + time[8] + time[9])) * (direction[0] + direction[1] + direction[2] + direction[3] + direction[4] + direction[5] + direction[6] + direction[7] + direction[8] + direction[9] > 0 ? 1 : -1);
-		}
-	}
-}
+//void TIM2_IRQHandler(void){
+//	if(TIM2->SR & TIM_SR_UIF){
+//		TIM2->SR &= ~TIM_SR_UIF;
+//		if (direction[0] == 0 || direction[1] == 0 ||direction[2] == 0 ||direction[3] == 0 ||direction[4] == 0 ||direction[5] == 0 ||direction[6] == 0 ||direction[7] == 0 ||direction[8] == 0 ||direction[9] == 0){
+//			speedA2A3 = 0;
+//		}
+//		else{
+//			speedA2A3 = (int32_t)(SpeedScaler / (time[0] + time[1] + time[2] + time[3] + time[4] + time[5] + time[6] + time[7] + time[8] + time[9])) * (direction[0] + direction[1] + direction[2] + direction[3] + direction[4] + direction[5] + direction[6] + direction[7] + direction[8] + direction[9] > 0 ? 1 : -1);
+//		}
+//	}
+//}

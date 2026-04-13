@@ -3,7 +3,7 @@
 #include <string.h>
 
 void WriteModbus(void){
-	ControlSystemStatus = OutputRegisters[CONTROL_SYSTEM_STATUS_ADDRESS] & 1;
+	//ControlSystemStatus = OutputRegisters[CONTROL_SYSTEM_STATUS_ADDRESS] & 1;
 	targetSpeedA2A3 = OutputRegisters[1];
 }
 /*
