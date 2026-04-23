@@ -5,7 +5,7 @@ void Engine_A2A3_setPWM(float voltage);
 
 void Engine_A2A3_init(void){
 
-    Tahometer_B0B1_init();
+    //Tahometer_B0B1_init();
     //ControlSystem_A2A3_init(); //For tahoemter
 		
 	

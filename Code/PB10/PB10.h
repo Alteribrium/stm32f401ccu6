@@ -7,6 +7,6 @@ void BUTTON_PB10_Init(void);
 void EXTI9_5_IRQHandler(void);
 void TIM2_IRQHandler(void);
 
-extern uint8_t PB10_state;
+extern uint8_t TableSensor;
 
 #endif

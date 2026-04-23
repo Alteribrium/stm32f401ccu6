@@ -4,27 +4,20 @@ void Conveyor_Process(void);
 void Table_Process(void);
 void Manipualtor_Process(void);
 void HMI_Process(void);
-static uint8_t pb10 = 0;
+void Dispenser1_Process(void);
+void Dispenser2_Process(void);
+void Dispenser3_Process(void);
 ///
-void StopTable(void);
-void StartTable(void);
 
-void Dispenser1start(void);
-void Dispenser2start(void);
-void Dispenser3start(void);
 
 void ManipulatorGetFromTable(void);
 void ManipulatorGetFromConveyor(void);
 ///
 ///
-static uint8_t TableSensor = 0; //1 if rised, else 0
 static uint8_t cup[5] = {0, 0, 0, 0, 0}; // 0 - no cup, 1 - cup; 0 - starting position , 5 - ending position
 static uint8_t ConveyorSensor = 0; //1 if rised, else 0
 static uint8_t targetCounter = 50;
 
-static uint8_t Dispenser1state = 0;
-static uint8_t Dispenser2state = 0;
-static uint8_t Dispenser3state = 0;
 ///
 
 typedef enum {
@@ -43,9 +36,32 @@ typedef enum {
 } ConveyorState_t;
 
 typedef enum {
+    DISPENSER_STOP = 0,
+    DISPENSER_RUN = 1
+} DispenserState_t;
+
+typedef enum {
     TABLE_STOP = 0,
     TABLE_RUN = 1
 } TableState_t;
+
+
+static DispenserState_t Dispenser1state = DISPENSER_STOP;
+static DispenserState_t Dispenser2state = DISPENSER_STOP;
+static DispenserState_t Dispenser3state = DISPENSER_STOP;
+
+static uint64_t Dispenser1startTime = 0;
+static uint64_t Dispenser2startTime = 0;
+static uint64_t Dispenser3startTime = 0;
+
+static uint64_t Dispenser1targetTime = 1000;
+static uint64_t Dispenser2targetTime = 1000;
+static uint64_t Dispenser3targetTime = 1000;
+
+
+static uint8_t prevDispenser1state = 255;
+static uint8_t prevDispenser2state = 255;
+static uint8_t prevDispenser3state = 255;
 
 static TableState_t tableState = TABLE_STOP;
 static ConveyorState_t conveyorState = CONVEYOR_STOP;
@@ -59,14 +75,20 @@ int main(void)
 { 
 	init();
 	for(;;){
-			pb10 = (GPIOB->IDR & GPIO_IDR_IDR_10) ? 1 : 0;
 		  HMI_Process();
 			Manipualtor_Process();
 			Table_Process();
 			Conveyor_Process();
+			Dispenser1_Process();
+			Dispenser2_Process();
+			Dispenser3_Process();
 			Modbus_Work();
 			WriteModbus();
 	}
+	/*
+	for(;;){
+		__NOP();
+	}*/
 }
 
 void HMI_Process(void){
@@ -89,8 +111,10 @@ void Table_Process(void){
 				if(cup[2]){Dispenser2start();}
 				if(cup[3]){Dispenser3start();}}break;
 		case TABLE_STOP:
-			if(cup[4] == 0 && Dispenser1state == 0 && Dispenser2state == 0 && Dispenser3state == 0 && (cup[0] || cup[1] || cup[2] || cup[3])){
-				tableState = TABLE_RUN;}break;
+			if(cup[4] == 0 && Dispenser1state == 0 && Dispenser2state == 0 && Dispenser3state == 0 && 
+				(cup[0] || cup[1] || cup[2] || cup[3]) && 
+				( (cup[0] + cup[1] + cup[2] + cup[3] + cup[4] >= targetCounter) || (cup[0])))
+			{tableState = TABLE_RUN;}break;
 	
 	}
 }
@@ -106,6 +130,7 @@ void Manipualtor_Process(void){
 				manipulatorState = MANIPULATORGETCUPFROMTABLE;
 				ManipulatorGetFromTable();
 		}
+	
 	else if (manipulatorState == MANIPULATORGETCUPFROMTABLECOMPLETE){
 		manipulatorState = MANIPULATOPSTOP;
 		cup[4] = 0;
@@ -131,12 +156,69 @@ void Conveyor_Process(void){
 }
 
 
+
+
+void Dispenser1_Process(void){
+	if(Dispenser1state != prevDispenser1state){
+			prevDispenser1state = Dispenser1state;
+					if(Dispenser1state == DISPENSER_RUN){Dispenser1start(); Dispenser1startTime = msCounter;}
+					else{Dispenser1stop();}}
+	switch(Dispenser1state)
+			{case DISPENSER_RUN:
+            if (msCounter >= Dispenser1startTime + Dispenser1targetTime) Dispenser1state = DISPENSER_STOP; break;
+			case DISPENSER_STOP:
+            __NOP(); break;
+			}
+}
+
+void Dispenser2_Process(void){
+	if(Dispenser2state != prevDispenser2state){
+			prevDispenser2state = Dispenser2state;
+					if(Dispenser2state == DISPENSER_RUN){Dispenser2start();}
+					else{Dispenser2stop();}}
+	switch(Dispenser2state)
+			{case DISPENSER_RUN:
+            if (msCounter >= Dispenser2startTime + Dispenser2targetTime) Dispenser2state = DISPENSER_STOP; break;
+			case DISPENSER_STOP:
+            __NOP(); break;
+			}
+}
+
+void Dispenser3_Process(void){
+	if(Dispenser3state != prevDispenser3state){
+			prevDispenser3state = Dispenser3state;
+					if(Dispenser3state == DISPENSER_RUN){Dispenser3start();}
+					else{Dispenser3stop();}}
+	switch(Dispenser3state)
+			{case DISPENSER_RUN:
+            if (msCounter >= Dispenser3startTime + Dispenser3targetTime) Dispenser3state = DISPENSER_STOP; break;
+			case DISPENSER_STOP:
+            __NOP(); break;
+			}
+}
+
+
+
+
+
+void ManipulatorGetFromTable(void){
+	__NOP();
+}
+void ManipulatorGetFromConveyor(void){
+	__NOP();
+}
+
+
+
+
 void init(void){
 		//BUTTON_PB6_Init();
+		Table_Init();
 		BUTTON_PB10_Init();
 		SysClock_init();
 		Engine_A2A3_init();
 		USART1_init();
 		Engine_B6B7_init();
 		Engine_B6B7_setPWM(0);
+		//StartTable();
 }
