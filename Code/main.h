@@ -16,4 +16,7 @@
 #include "USART/USART1.h"
 #include "modbusFunctions.h"
 #include "PA6/PA6.h"
+#include "PA5/PA5.h"
+#include "PA4/PA4.h"
+#include "PA7/PA7.h"
 #endif

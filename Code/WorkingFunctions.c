@@ -24,13 +24,27 @@ void StartTable(void){
 	Start_Table();
 }
 
-
+//Dispensers
 void Dispenser1start(void){
-	Dispenser1state = 1;
+	Start_Dispenser_A4();
 }
+
+void Dispenser1stop(void){
+	Stop_Dispenser_A4();
+}
+
 void Dispenser2start(void){
-	Dispenser2state = 1;
+	Start_Dispenser_A5();
 }
+
+void Dispenser2stop(void){
+	Stop_Dispenser_A5();
+}
+
 void Dispenser3start(void){
-	Dispenser3state = 1;
+	Start_Dispenser_A6();
+}
+
+void Dispenser3stop(void){
+	Stop_Dispenser_A6();
 }

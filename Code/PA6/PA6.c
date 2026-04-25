@@ -1,45 +1,52 @@
 #include "PA6.h"
 
 static volatile uint8_t table_running = 0;
-static uint16_t current_period = 100; //form 20 to 10000
+static uint16_t current_period = 1000; // ?? 20 ?? 10000
 
-void Table_Init(void) {
+void Dispenser_A6_Init(void) {
+    // 1. ????????? ????????????
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
-    
-    GPIOA->MODER &= ~GPIO_MODER_MODER6;
-    GPIOA->MODER |= GPIO_MODER_MODER6_1; 
-    
-    GPIOA->AFR[0] &= ~GPIO_AFRL_AFRL6;
-    GPIOA->AFR[0] |= GPIO_AFRL_AFRL6_1;
-    
     RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
     
-    TIM3->PSC = 16 - 1;
-    TIM3->ARR = current_period;
-    TIM3->CCR1 = current_period / 2;
+    // 2. ????????? PA6 ??? Alternate Function
+    GPIOA->MODER &= ~GPIO_MODER_MODER6;
+    GPIOA->MODER |= GPIO_MODER_MODER6_1; // Alternate Function mode
     
-    TIM3->CCMR1 &= ~TIM_CCMR1_OC1M;
-    TIM3->CCMR1 |= TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_2;
-    TIM3->CCMR1 |= TIM_CCMR1_OC1PE;
+    // 3. !!! ?????: PA6 ??? TIM3_CH1 ?????????? AF2 !!!
+    GPIOA->AFR[0] &= ~(0xF << (6 * 4));  // ????? ????? ??? PA6
+    GPIOA->AFR[0] |= (2 << (6 * 4));     // AF2 = TIM3_CH1
+    
+    // 4. ????????? ???????? ??????
+    GPIOA->OSPEEDR |= (3 << (6 * 2));    // High speed
+    
+    // 5. ????????? TIM3 ??? ???
+    TIM3->PSC = 16 - 1;                  // ????????????
+    TIM3->ARR = current_period;          // ??????
+    TIM3->CCR1 = 0;//current_period / 2;     // 50% ??????????
+    
+    // 6. ????????? ?????? ??? (PWM mode 1)
+    TIM3->CCMR1 &= ~TIM_CCMR1_OC1M;      // ????? ????? ??????
+    TIM3->CCMR1 |= TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_2; // PWM mode 1 (110)
+    TIM3->CCMR1 |= TIM_CCMR1_OC1PE;      // ???????? ????????????
     
     TIM3->CCER |= TIM_CCER_CC1E;
-    
-    TIM3->CR1 &= ~TIM_CR1_CEN;
+		
+    TIM3->CR1 |= TIM_CR1_CEN;
+		Stop_Dispenser_A6();
 }
 
-
-void Start_Table(void) {
+void Start_Dispenser_A6(void) {
     if (!table_running) {
         table_running = 1;
-        TIM3->CNT = 0;
-        TIM3->CR1 |= TIM_CR1_CEN;
+        TIM3->CNT = 1;           
+				TIM3->CCR1 = current_period / 2; 
+				TIM3->CR1 |= TIM_CR1_CEN;  			
     }
 }
 
-void Stop_Table(void) {
+void Stop_Dispenser_A6(void) {
     if (table_running) {
         table_running = 0;
-        TIM3->CR1 &= ~TIM_CR1_CEN;
-        GPIOA->BSRR = GPIO_BSRR_BR_6;
+        TIM3->CCR1 = 0;
     }
 }

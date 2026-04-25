@@ -54,9 +54,9 @@ static uint64_t Dispenser1startTime = 0;
 static uint64_t Dispenser2startTime = 0;
 static uint64_t Dispenser3startTime = 0;
 
-static uint64_t Dispenser1targetTime = 1000;
-static uint64_t Dispenser2targetTime = 1000;
-static uint64_t Dispenser3targetTime = 1000;
+static uint64_t Dispenser1targetTime = 10000;
+static uint64_t Dispenser2targetTime = 10000;
+static uint64_t Dispenser3targetTime = 10000;
 
 
 static uint8_t prevDispenser1state = 255;
@@ -107,9 +107,9 @@ void Table_Process(void){
 				TableSensor = 0;
 				cup[4] = cup[3]; cup[3] = cup[2]; cup[2] = cup[1]; cup[1] = cup[0]; cup[0] = 0;
 				tableState = TABLE_STOP;
-				if(cup[1]){Dispenser1start();}
-				if(cup[2]){Dispenser2start();}
-				if(cup[3]){Dispenser3start();}}break;
+				if(cup[1]){Dispenser1state = DISPENSER_RUN;}
+				if(cup[2]){Dispenser2state = DISPENSER_RUN;}
+				if(cup[3]){Dispenser3state = DISPENSER_RUN;}}break;
 		case TABLE_STOP:
 			if(cup[4] == 0 && Dispenser1state == 0 && Dispenser2state == 0 && Dispenser3state == 0 && 
 				(cup[0] || cup[1] || cup[2] || cup[3]) && 
@@ -174,7 +174,7 @@ void Dispenser1_Process(void){
 void Dispenser2_Process(void){
 	if(Dispenser2state != prevDispenser2state){
 			prevDispenser2state = Dispenser2state;
-					if(Dispenser2state == DISPENSER_RUN){Dispenser2start();}
+					if(Dispenser2state == DISPENSER_RUN){Dispenser2start(); Dispenser2startTime = msCounter;}
 					else{Dispenser2stop();}}
 	switch(Dispenser2state)
 			{case DISPENSER_RUN:
@@ -187,7 +187,7 @@ void Dispenser2_Process(void){
 void Dispenser3_Process(void){
 	if(Dispenser3state != prevDispenser3state){
 			prevDispenser3state = Dispenser3state;
-					if(Dispenser3state == DISPENSER_RUN){Dispenser3start();}
+					if(Dispenser3state == DISPENSER_RUN){Dispenser3start();Dispenser3startTime = msCounter;}
 					else{Dispenser3stop();}}
 	switch(Dispenser3state)
 			{case DISPENSER_RUN:
@@ -220,5 +220,9 @@ void init(void){
 		USART1_init();
 		Engine_B6B7_init();
 		Engine_B6B7_setPWM(0);
+		//Dispenser_A4_Init();
+		//Dispenser_A5_Init();
+		Dispenser_A6_Init();
 		//StartTable();
+		Dispenser3start();
 }
