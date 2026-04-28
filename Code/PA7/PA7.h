@@ -3,8 +3,8 @@
 
 #include "main.h"
 
-void Table_Init(void);
-void Start_Table(void);
-void Stop_Table(void);
+void Dispenser_A7_Init(void);
+void Start_Dispenser_A7(void);
+void Stop_Dispenser_A7(void);
 
 #endif

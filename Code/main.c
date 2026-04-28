@@ -54,7 +54,7 @@ static uint64_t Dispenser1startTime = 0;
 static uint64_t Dispenser2startTime = 0;
 static uint64_t Dispenser3startTime = 0;
 
-static uint64_t Dispenser1targetTime = 10000;
+static uint64_t Dispenser1targetTime = 50000;
 static uint64_t Dispenser2targetTime = 10000;
 static uint64_t Dispenser3targetTime = 10000;
 
@@ -74,6 +74,7 @@ static uint8_t prevtableState = 255;
 int main(void)
 { 
 	init();
+	
 	for(;;){
 		  HMI_Process();
 			Manipualtor_Process();
@@ -213,16 +214,16 @@ void ManipulatorGetFromConveyor(void){
 
 void init(void){
 		//BUTTON_PB6_Init();
-		Table_Init();
+		//Table_Init();
 		BUTTON_PB10_Init();
 		SysClock_init();
 		Engine_A2A3_init();
 		USART1_init();
 		Engine_B6B7_init();
 		Engine_B6B7_setPWM(0);
-		//Dispenser_A4_Init();
-		//Dispenser_A5_Init();
 		Dispenser_A6_Init();
+		//Dispenser_A7_Init();
+		//Dispenser_B0_Init();
 		//StartTable();
-		Dispenser3start();
+		//Dispenser3start();
 }

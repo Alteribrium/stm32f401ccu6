@@ -1,9 +1,9 @@
 #include "PA7.h"
 
 static volatile uint8_t table_running = 0;
-static uint16_t current_period = 100; // ?? 20 ?? 10000
+static uint16_t current_period = 1000; // ?? 20 ?? 10000
 
-void Table_Init(void) {
+void Dispenser_A7_Init(void) {
     // 1. ????????? ????????????
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
     RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
@@ -34,10 +34,10 @@ void Table_Init(void) {
     
     // 8. ?????? ???? ?? ???????
 		TIM3->CR1 |= TIM_CR1_CEN;
-		Stop_Table();
+		Stop_Dispenser_A7();
 }
 
-void Start_Table(void) {
+void Start_Dispenser_A7(void) {
     if (!table_running) {
         table_running = 1;
 				TIM3->CNT = 1;
@@ -46,7 +46,7 @@ void Start_Table(void) {
     }
 }
 
-void Stop_Table(void) {
+void Stop_Dispenser_A7(void) {
     if (table_running) {
         table_running = 0; 
         TIM3->CCR2 = 0;
