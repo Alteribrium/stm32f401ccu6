@@ -1,7 +1,7 @@
 #include "PB0.h"
 
-static volatile uint8_t pwm_running = 0;
-static uint16_t current_period = 1000; // ?? 20 ?? 10000
+static volatile uint8_t table_running = 0;
+static uint16_t current_period = 700; // ?? 20 ?? 10000
 
 void Dispenser_B0_Init(void) {
     // 1. ????????? ????????????
@@ -38,8 +38,8 @@ void Dispenser_B0_Init(void) {
 }
 
 void Start_Dispenser_B0(void) {
-    if (!pwm_running) {
-        pwm_running = 1;
+    if (!table_running) {
+        table_running = 1;
         TIM3->CNT = 1;
         TIM3->CCR3 = current_period / 2;
         TIM3->CR1 |= TIM_CR1_CEN;
@@ -47,8 +47,8 @@ void Start_Dispenser_B0(void) {
 }
 
 void Stop_Dispenser_B0(void) {
-    if (pwm_running) {
-        pwm_running = 0;
+    if (table_running) {
+        table_running = 0;
         TIM3->CCR3 = 0;
     }
 }

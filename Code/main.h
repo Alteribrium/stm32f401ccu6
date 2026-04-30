@@ -19,4 +19,5 @@
 #include "PB0/PB0.h"
 #include "PB1/PB1.h"
 #include "PA7/PA7.h"
+#include "PB4567/PB4567.h"
 #endif

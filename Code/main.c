@@ -20,6 +20,12 @@ static uint8_t targetCounter = 50;
 
 ///
 
+
+
+
+//
+static uint64_t prevtime;
+
 typedef enum {
     MANIPULATOPSTOP = 0,
     MANIPULATORPICKCUPFROMTABLE = 1,
@@ -54,9 +60,9 @@ static uint64_t Dispenser1startTime = 0;
 static uint64_t Dispenser2startTime = 0;
 static uint64_t Dispenser3startTime = 0;
 
-static uint64_t Dispenser1targetTime = 50000;
-static uint64_t Dispenser2targetTime = 10000;
-static uint64_t Dispenser3targetTime = 10000;
+static uint64_t Dispenser1targetTime = 60000;
+static uint64_t Dispenser2targetTime = 60000;
+static uint64_t Dispenser3targetTime = 60000;
 
 
 static uint8_t prevDispenser1state = 255;
@@ -85,6 +91,10 @@ int main(void)
 			Dispenser3_Process();
 			Modbus_Work();
 			WriteModbus();
+			if( msCounter - prevtime > 100){
+				prevtime = msCounter;
+				table_B4567_Process();
+			}
 	}
 	/*
 	for(;;){
@@ -222,6 +232,9 @@ void init(void){
 		Engine_B6B7_init();
 		Engine_B6B7_setPWM(0);
 		Dispenser_A6_Init();
+		Table_B4567_Init();
+		prevtime = msCounter;
+		Start_table_B4567();
 		//Dispenser_A7_Init();
 		//Dispenser_B0_Init();
 		//StartTable();

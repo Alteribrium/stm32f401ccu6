@@ -1,7 +1,7 @@
 #include "PB1.h"
 
-static volatile uint8_t pwm_running = 0;
-static uint16_t current_period = 100; // ?? 20 ?? 10000
+static volatile uint8_t table_running = 0;
+static uint16_t current_period = 700; // ?? 20 ?? 10000
 
 void Table_Init(void) {
     // 1. ????????? ????????????
@@ -38,8 +38,8 @@ void Table_Init(void) {
 }
 
 void Start_Table(void) {
-    if (!pwm_running) {
-        pwm_running = 1;
+    if (!table_running) {
+        table_running = 1;
         TIM3->CNT = 1;
         TIM3->CCR4 = current_period / 2;
         TIM3->CR1 |= TIM_CR1_CEN;
@@ -47,8 +47,8 @@ void Start_Table(void) {
 }
 
 void Stop_Table(void) {
-    if (pwm_running) {
-        pwm_running = 0;
+    if (table_running) {
+        table_running = 0;
         TIM3->CCR4 = 0;
     }
 }
