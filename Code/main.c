@@ -235,6 +235,7 @@ void init(void){
 		Table_B4567_Init();
 		prevtime = msCounter;
 		Start_table_B4567();
+		B12131415_Init();
 		//Dispenser_A7_Init();
 		//Dispenser_B0_Init();
 		//StartTable();
