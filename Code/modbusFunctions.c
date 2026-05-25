@@ -3,8 +3,11 @@
 #include <string.h>
 
 void WriteModbus(void){
+	//target = OutputRegisters[3];
+	MainState = OutputRegisters[9];
 	//ControlSystemStatus = OutputRegisters[CONTROL_SYSTEM_STATUS_ADDRESS] & 1;
-	targetSpeedA2A3 = OutputRegisters[1];
+	//targetSpeedA2A3 = OutputRegisters[1];
+	__NOP();
 }
 /*
 void putFloatToAddress(float val, uint16_t addr) {

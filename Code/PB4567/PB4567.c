@@ -2,15 +2,26 @@
 
 static volatile uint8_t table_running = 0;
 extern uint8_t counter = 0;
+void TIM4_IRQHandler(void);
 
 static uint8_t states[4][8] = {
     {1, 1, 0, 0, 0, 0, 0, 1},
+		{0, 1, 1, 1, 0, 0, 0, 0},
     {0, 0, 0, 1, 1, 1, 0, 0},
-    {0, 1, 1, 1, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 1, 1, 1}
 };
 
 void Table_B4567_Init(void) {
+///
+		RCC->APB1ENR |= RCC_APB1ENR_TIM4EN;
+
+		TIM4->PSC = 800 - 1;     
+		TIM4->ARR = 50;           
+		TIM4->DIER |= TIM_DIER_UIE; 
+		TIM4->EGR |= TIM_EGR_UG;   
+		NVIC_EnableIRQ(TIM4_IRQn);
+		TIM4->CR1 |= TIM_CR1_CEN;
+///	
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
 		GPIOB->MODER &= ~GPIO_MODER_MODE4;
 		GPIOB->MODER |= GPIO_MODER_MODE4_0; 
@@ -82,4 +93,14 @@ void table_B4567_Process(void){
 		else{
 			__NOP();
 		}
+}
+
+
+void TIM4_IRQHandler(void) {
+    if(TIM4->SR & TIM_SR_UIF) {
+        TIM4->SR &= ~TIM_SR_UIF;
+        if(table_running) {
+            table_B4567_Process();
+        }
+    }
 }

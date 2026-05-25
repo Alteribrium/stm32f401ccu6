@@ -17,11 +17,11 @@ void StopConveyor(void){
 
 //table
 void StopTable(void){
-	Stop_Table();
+	Stop_table_B4567();
 }
 
 void StartTable(void){
-	Start_Table();
+	Start_table_B4567();
 }
 
 //Dispensers

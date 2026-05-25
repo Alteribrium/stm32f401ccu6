@@ -6,7 +6,7 @@ void EXTI15_10_IRQHandler(void);
 void TIM2_IRQHandler(void);
 
 
-uint8_t TableSensor = 0;
+uint8_t ConveyorSensor = 0;
 static uint8_t drebezg;
 
 void BUTTON_PB10_Init(void) {
@@ -17,13 +17,12 @@ void BUTTON_PB10_Init(void) {
     GPIOB->PUPDR &= ~GPIO_PUPDR_PUPDR10;
 		GPIOB->PUPDR |= GPIO_PUPDR_PUPDR10_1;
 
-    // EXTI ?????????
     RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
     SYSCFG->EXTICR[2] &= ~SYSCFG_EXTICR3_EXTI10;
     SYSCFG->EXTICR[2] |= SYSCFG_EXTICR3_EXTI10_PB;
     
-    EXTI->RTSR |= EXTI_RTSR_TR10;    // ?????????? ?? ????????????
-    EXTI->FTSR &= ~EXTI_FTSR_TR10;   // ?? ?? ??????????
+    EXTI->RTSR &= ~EXTI_RTSR_TR10;   
+    EXTI->FTSR |= EXTI_FTSR_TR10; 
     EXTI->IMR |= EXTI_IMR_MR10;
 	
 		EXTI->PR = EXTI_PR_PR10;
@@ -44,7 +43,7 @@ void BUTTON_PB10_Init(void) {
     NVIC_EnableIRQ(TIM2_IRQn);
 		
 		drebezg = 0;
-    TableSensor = 0;
+    ConveyorSensor = 0;
 }
 
 void EXTI15_10_IRQHandler(void) {
@@ -69,6 +68,6 @@ void TIM2_IRQHandler(void) {
         TIM2->CR1 &= ~TIM_CR1_CEN;
         TIM2->CNT = 0;
 				if(((GPIOB->IDR & GPIO_IDR_IDR_10) ? 1 : 0) == 0){
-				TableSensor = 1;}
+				ConveyorSensor = 1;}
     }
 }

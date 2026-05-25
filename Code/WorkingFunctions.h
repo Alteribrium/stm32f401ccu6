@@ -2,7 +2,7 @@
 #define WORKFUNC_H_
 #include "../main.h"
 
-#define DEFAULT_CONVEYOR_VOLTAGE 12
+#define DEFAULT_CONVEYOR_VOLTAGE -8
 
 void StartConveyor(void);
 void StopConveyor(void);

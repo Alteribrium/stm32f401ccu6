@@ -4,7 +4,7 @@ void Tahometer_B0B1_init(void);
 void TIM3_IRQHandler(void);
 void Tahometer_B0B1_riseDetected(uint32_t value,int8_t dir);
 void Tahometer_B0B1_zeroriseDetected(void);
-void TIM2_IRQHandler(void);
+//void TIM2_IRQHandler(void);
 
 static uint32_t time[10] = {0};
 static int8_t direction[10] = {0};
